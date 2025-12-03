@@ -76,6 +76,10 @@ function sacar(&$clientes){
     $conta = readline("Informe o número da conta: ");
 
     $valorSaque = readline("Informe o valor do saque:");
+
+    if($clientes[$cpf]['contas'][$conta]['saldo'] + CHEQUE_ESPECIAL >= $valorSaque){
+        $clientes[$cpf]['contas'][$conta]['saldo'] -= $valorSaque;
+    }
 }
 
 //MENU PRINCIPAL

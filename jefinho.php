@@ -41,6 +41,7 @@ function cadastrarConta(array &$clientes): bool{
     ];
 
     print("Conta criada com sucesso\n");
+    print("O número da sua conta é: " . $numConta);
     return true;
 
 }
@@ -64,6 +65,17 @@ function depositar(array &$clientes){
 
     print "Depósito realizado com sucesso\n";
     return true;
+}
+
+function sacar(&$clientes){
+
+    $cpf = readline("Informe seu CPF:");
+
+    //validacao do CPF
+
+    $conta = readline("Informe o número da conta: ");
+
+    $valorSaque = readline("Informe o valor do saque:");
 }
 
 //MENU PRINCIPAL
@@ -99,8 +111,19 @@ while(true){
         case '3':
             depositar($clientes);
             break;
+        case '4':
+            sacar($clientes);
+            print("Saque realizado com sucesso");
+            break;
+        case '5':
+            print($clientes[$cpf]['contas'][$numConta]['saldo']);
+            break;
+        case '6':
+            print($clientes[$cpf]['contas'][$numConta]['extrato']);
+            break;
         case '7':
             print("Obrigado por usar nosso banco\n");
+            print("Saindo...");
             die();
         default:
             print "Opção inválida";

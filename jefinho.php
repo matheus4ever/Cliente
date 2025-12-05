@@ -119,7 +119,15 @@ function consultarSaldo(&$clientes){
    }
 function consultarExtrato(&$clientes){
   $cpf = readline("Qual o seu cpf?");
+  if(!isset($clientes[$cpf])){
+        print "Cliente não possui cadastro\n";
+        return false;
+    }
    $numConta = readline("Qual o número da sua conta?");
+   if(!isset($clientes[$cpf]['contas'][$numConta])){
+        print "Conta não encontrada\n";
+        return false;
+    }
    print "Seus extratos são esses: \n" . ($clientes[$cpf]['contas'][$numConta]['extrato']);
 
 }

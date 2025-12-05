@@ -48,8 +48,16 @@ function cadastrarConta(array &$clientes): bool{
 
 function depositar(array &$clientes){
     $cpf = readline("Informe seu CPF novamente: ");
+    if(!isset($clientes[$cpf])){
+        print "Cliente não possui cadastro\n";
+        return false;
+    }
 
     $numConta  = readline("Informe o número da conta: ");
+    if(!isset($clientes[$cpf]['contas'][$numConta])){
+        print "Conta não encontrada\n";
+        return false;
+    }
 
     $valorDeposito = (float) readline("Informe o valor do depósito: ");
 
@@ -72,14 +80,50 @@ function sacar(&$clientes){
     $cpf = readline("Informe seu CPF:");
 
     //validacao do CPF
+    if(!isset($clientes[$cpf])){
+        print "Cliente não possui cadastro\n";
+        return false;
+    }
 
     $conta = readline("Informe o número da conta: ");
+    if(!isset($clientes[$cpf]['contas'][$conta])){
+        print "Conta não encontrada\n";
+        return false;
+    }
 
     $valorSaque = readline("Informe o valor do saque:");
 
     if($clientes[$cpf]['contas'][$conta]['saldo'] + CHEQUE_ESPECIAL >= $valorSaque){
         $clientes[$cpf]['contas'][$conta]['saldo'] -= $valorSaque;
     }
+    print("Saque realizado com sucesso");
+    return true;
+    
+}
+
+function consultarSaldo(&$clientes){
+   $cpf = readline("Qual o seu cpf?");
+   if(!isset($clientes[$cpf])){
+        print "Cliente não possui cadastro\n";
+        return false;
+    }
+   $numConta = readline("Qual o número da sua conta?");
+   if(!isset($clientes[$cpf]['contas'][$numConta])){
+        print "Conta não encontrada\n";
+        return false;
+    }
+   print "Seu saldo é de: " . $clientes[$cpf]['contas'][$numConta]['saldo'];
+   if ($clientes[$cpf]['contas'][$numConta]['saldo'] <= 0){
+    print("Você não tem nada na sua conta...");
+    return true;
+   }
+function consultarExtrato(&$clientes){
+  $cpf = readline("Qual o seu cpf?");
+   $numConta = readline("Qual o número da sua conta?");
+   print "Seus extratos são esses: \n" . ($clientes[$cpf]['contas'][$numConta]['extrato']);
+
+}
+
 }
 
 //MENU PRINCIPAL
@@ -117,13 +161,12 @@ while(true){
             break;
         case '4':
             sacar($clientes);
-            print("Saque realizado com sucesso");
             break;
         case '5':
-            print($clientes[$cpf]['contas'][$numConta]['saldo']);
+            consultarSaldo($clientes);
             break;
         case '6':
-            print($clientes[$cpf]['contas'][$numConta]['extrato']);
+            consultarExtrato($clientes);
             break;
         case '7':
             print("Obrigado por usar nosso banco\n");

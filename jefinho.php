@@ -93,10 +93,22 @@ function sacar(&$clientes){
 
     $valorSaque = readline("Informe o valor do saque:");
 
-    if($clientes[$cpf]['contas'][$conta]['saldo'] + CHEQUE_ESPECIAL >= $valorSaque){
-        $clientes[$cpf]['contas'][$conta]['saldo'] -= $valorSaque;
+    if ($valorSaque <= 0) {
+        print("Valor de saque inválido\n");
+        return false;
     }
-    print("Saque realizado com sucesso");
+
+    if ($clientes[$cpf]['contas'][$conta]['saldo'] + CHEQUE_ESPECIAL >= $valorSaque) {
+        $clientes[$cpf]['contas'][$conta]['saldo'] -= $valorSaque;
+
+        $dataHora = date('d/m/Y H:i');
+        $clientes[$cpf]['contas'][$conta]['extrato'][] = "Saque de R$ $valorSaque em $dataHora";
+
+        print("Saque realizado com sucesso\n");
+        return true;
+    }
+
+    print("Saldo insuficiente para saque\n");
     return true;
     
 }
@@ -117,6 +129,9 @@ function consultarSaldo(&$clientes){
     print("Você não tem nada na sua conta...");
     return true;
    }
+}
+
+
 function consultarExtrato(&$clientes){
   $cpf = readline("Qual o seu cpf?");
   if(!isset($clientes[$cpf])){
@@ -128,11 +143,17 @@ function consultarExtrato(&$clientes){
         print "Conta não encontrada\n";
         return false;
     }
-   print "Seus extratos são esses: \n" . ($clientes[$cpf]['contas'][$numConta]['extrato']);
+   $extrato = $clientes[$cpf]['contas'][$numConta]['extrato'];
+
+   foreach ($extrato as $linha) {
+       print $linha . "\n";
+   }
+
+   return true;
 
 }
 
-}
+
 
 //MENU PRINCIPAL
 function menu(){
@@ -185,12 +206,3 @@ while(true){
             break;
     }
 }
-
-    cadastrarCliente($clientes);
-    print_r($clientes);
-
-    cadastrarConta($clientes);
-    print_r($clientes);
-
-    depositar($clientes);
-    print_r($clientes);
